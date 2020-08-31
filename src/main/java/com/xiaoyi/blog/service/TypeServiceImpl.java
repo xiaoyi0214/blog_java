@@ -1,9 +1,12 @@
 package com.xiaoyi.blog.service;
 
-import com.github.pagehelper.Page;
+import com.xiaoyi.blog.dao.TypeMapper;
 import com.xiaoyi.blog.po.Type;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by 小逸 on 2020/8/17.
@@ -12,28 +15,38 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TypeServiceImpl implements TypeService {
+
+    @Autowired
+    private TypeMapper typeMapper;
+
+    @Transactional
     @Override
-    public Type saveType(Type type) {
-        return null;
+    public int saveType(Type type) {
+        return typeMapper.insert(type);
     }
 
     @Override
-    public void deleteTpye(Long id) {
-
+    public int deleteTpye(Long id) {
+        return typeMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public Type getType(Long id) {
-        return null;
+        return typeMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public Page<Type> listType(SpringDataWebProperties.Pageable pageable) {
-        return null;
+    public Type getTypeByName(String name) {
+        return typeMapper.selectByName(name);
     }
 
     @Override
-    public Type updateType(Long id, Type type) {
-        return null;
+    public List<Type> getAllType() {
+        return typeMapper.getAllType();
+    }
+
+    @Override
+    public int updateType(Long id, Type type) {
+        return typeMapper.updateByPrimaryKey(type);
     }
 }

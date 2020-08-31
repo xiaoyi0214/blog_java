@@ -8,18 +8,64 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id,name
+    id, name
   </sql>
-  <delete id="deleteById" parameterType="java.lang.Long">
-    delete from t_type
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-
-  <select id="getType" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_type
     where id = #{id,jdbcType=BIGINT}
   </select>
-
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_type
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+  <select id="getAllType" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_type
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_type
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xiaoyi.blog.po.Type" keyProperty="id" useGeneratedKeys="true" >
+    insert into t_type (id, name)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiaoyi.blog.po.Type">
+    insert into t_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiaoyi.blog.po.Type">
+    update t_type
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiaoyi.blog.po.Type">
+    update t_type
+    set name = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

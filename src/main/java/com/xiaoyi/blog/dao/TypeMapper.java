@@ -4,18 +4,24 @@ import com.xiaoyi.blog.po.Type;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface TypeMapper {
-    int deleteById(Long id);
+    int deleteByPrimaryKey(Long id);
 
-    int saveType(Type record);
+    int insert(Type record);
 
     int insertSelective(Type record);
 
-    Type getType(Long id);
+    Type selectByPrimaryKey(Long id);
+
+    Type selectByName(String name);
 
     int updateByPrimaryKeySelective(Type record);
 
-    int updateType(Type record);
+    int updateByPrimaryKey(Type record);
+
+    List<Type> getAllType();
 }

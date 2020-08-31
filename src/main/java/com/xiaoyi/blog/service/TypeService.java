@@ -1,8 +1,8 @@
 package com.xiaoyi.blog.service;
 
-import com.github.pagehelper.Page;
 import com.xiaoyi.blog.po.Type;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+
+import java.util.List;
 
 /**
  * Created by 小逸 on 2020/8/17.
@@ -11,14 +11,16 @@ import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
  */
 public interface TypeService {
 
-    Type saveType(Type type);
-
-    void deleteTpye(Long id);
+    int saveType(Type type);
 
     Type getType(Long id);
 
-    Page<Type> listType(SpringDataWebProperties.Pageable pageable);
+    Type getTypeByName(String name);
 
-    Type updateType(Long id, Type type);
+    List<Type> getAllType();
+
+    int updateType(Long id, Type type);
+
+    int deleteTpye(Long id);
 
 }

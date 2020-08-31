@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <!-- 适应移动端 -->
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>分类管理</title>
+    <title>分类新增</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">
     <link rel="stylesheet" href="../../static/css/me.css">
 </head>
 <body>
     <!-- 导航 -->
-    <nav  th:replece="admin/_fragements :: menu(2)" class="ui inverted attached segment m-padded-tb-small m-shadow-small" >
+    <nav th:replace="admin/_fragments :: menu(2)" class="ui inverted attached segment m-padded-tb-small m-shadow-small" >
         <div class="ui container">
             <div class="ui inverted secondary stackable menu">
                 <h2 class="ui teal header h-padded-left-mini">管理后台</h2>
@@ -50,20 +50,24 @@
     <!-- 中间内容 -->
     <div class="m-container m-padded-tb-big">
         <div class="ui container">
-            <form action="#" method="post" class="ui form">
+            <form action="#" th:object="${type}" th:action="*{id}==null ? @{/admin/types} : @{/admin/types/{id}(id=*{id})}" method="post" class="ui form">
                 <div class="field">
                     <div class="ui left labeled input">
                         <label class="ui teal basic label">分类名称</label>
-                        <input type="text" name="name" placeholder="分类名称">
-
+                        <input type="text" name="name" placeholder="分类名称" th:value="*{name}">
                     </div>
                 </div>
 
                 <div class="ui error message"></div>
+                <div class="ui negetive message" th:unless="${#strings.isEmpty(msg)}">
+                    <i class="close icon"></i>
+                    <div class="header">验证失败：</div>
+                    <p th:text="${msg}">对不起，操作失败！</p>
+                </div>
 
                 <div class="ui right aligned container">
                     <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
-                    <button class="ui teal button">提交</button>
+                    <button class="ui teal submit button">提交</button>
                 </div>
             </form>
         </div>
@@ -133,16 +137,24 @@
     });
     $('.ui.dropdown').dropdown();
 
+    //检验信息是否为空，为空推送错误报告
     $('.ui.form').form({
         fields : {
-            title : {
-                identifier : 'title',
+            name : {
+                identifier : 'name',
                 rules : [{
                     type : 'empty',
-                    prompt : '标题：请输入博客标题'
+                    prompt : '分类：请填写分类'
                 }]
             }
         }
+    });
+
+    //消息提示关闭初始化
+    $('.message .close').on('click', function () {
+        $(this)
+            .closest('.message')
+            .transition('fade');
     });
 </script>
 </body>

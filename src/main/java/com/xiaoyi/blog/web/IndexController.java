@@ -1,9 +1,7 @@
 package com.xiaoyi.blog.web;
 
-import com.xiaoyi.blog.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * Created by 小逸 on 2020/8/11.
