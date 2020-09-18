@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xiaoyi.blog.po.Tag;
 import com.xiaoyi.blog.service.TagService;
-import com.xiaoyi.blog.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,7 +55,7 @@ public class TagsController {
         }else {
             attributes.addFlashAttribute("msg", "添加成功");
             tagService.saveTag(tag);
-            return "redirect:/admin/tags";
+            return "redirect:/admin/tags";  //不能直接跳转到tags页面，否则不会显示tag数据(没经过tags方法)
         }
     }
 
@@ -73,7 +72,7 @@ public class TagsController {
         }else {
             attributes.addFlashAttribute("msg", "添加成功");
             tagService.updateTag(tag);
-            return "redirect:/admin/tags";
+            return "redirect:/admin/tags";  //不能直接跳转到tags页面，否则不会显示tag数据(没经过tags方法)
         }
     }
 
@@ -83,10 +82,4 @@ public class TagsController {
         attributes.addFlashAttribute("msg", "删除成功");
         return "redirect:/admin/tags";
     }
-
-
-
-
-
-
 }

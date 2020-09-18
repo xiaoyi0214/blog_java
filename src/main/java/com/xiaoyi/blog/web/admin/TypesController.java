@@ -45,6 +45,7 @@ public class TypesController {
         model.addAttribute("type", typeService.getType(id));
         return "admin/types-input";
     }
+
     @PostMapping("/types")
     public String addType(Type type, RedirectAttributes attributes){
         Type type1 = typeService.getTypeByName(type.getName());

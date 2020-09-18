@@ -14,9 +14,9 @@
         <div class="ui container">
             <div class="ui inverted secondary stackable menu">
                 <h2 class="ui teal header h-padded-left-mini">管理后台</h2>
-                <a href="#" class="m-item item m-mobile-hide"><i class="home icon "></i> 博客</a>
-                <a href="#" class="active m-item item m-mobile-hide"><i class="idea icon"></i> 分类</a>
-                <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i> 标签</a>
+                <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide" ><i class="home icon"></i>博客</a>
+                <a href="#" th:href="@{/admin/types}" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
+                <a href="#" th:href="@{/admin/tags}" class="active m-item item m-mobile-hide"><i class="tags icon"></i>标签</a>
                 <div class="right m-item m-mobile-hide menu">
                     <div class="ui dropdown item">
                         <div class="text">
@@ -25,7 +25,7 @@
                         </div>
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <a href="#" class="item">注销</a>
+                            <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
                         </div>
                     </div>
                 </div>
@@ -39,10 +39,9 @@
     <div class="ui attached pointing menu">
         <div class="ui container">
             <div class="right menu">
-                <a href="#" class="item">发布</a>
-                <a href="#" class="active teal item">博客管理</a>
+                <a href="#" th:href="@{/admin/tags/input}" class="item">发布</a>
+                <a href="#" th:href="@{/admin/tags}" class="active item">列表</a>
             </div>
-
         </div>
     </div>
 
@@ -58,10 +57,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="tag, iterStat : ${pageInfo.list}">
+                <!--        循环体，这里限定了里面每个元素是Tag类        -->
+                <tr th:each="tag, iterStat : ${pageInfo.list}">
                         <td th:text="${iterStat.count}">1</td>
                         <td th:text="${tag.name}">刻意练习青岛</td>
                         <td>
+                            <!--每一行可编辑删除的本体是个Type实体类（Page<Type>里封装的就是Type实体），所以可以直接获得其id并返回-->
                             <a href="#" th:href="@{/admin/tags/{id}/input(id=${tag.id})}" class="ui mini basic teal button">编辑</a>
                             <a href="#" th:href="@{/admin/tags/{id}/delete(id=${tag.id})}" class="ui mini basic red button">删除</a>
                         </td>

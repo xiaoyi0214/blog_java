@@ -41,8 +41,8 @@ public class LoginController {
                         RedirectAttributes attributes){
         User user = userService.checkUser(username, MD5Utils.code(password));
         if (user != null){
-            user.setPassword(null);
-            session.setAttribute("user", user);
+            user.setPassword(null); // 密码不保存
+            session.setAttribute("user", user); // 保持登录状态
             return "admin/index";
         } else {
 
