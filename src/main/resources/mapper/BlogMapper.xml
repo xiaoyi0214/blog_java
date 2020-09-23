@@ -1,278 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaoyi.blog.dao.BlogMapper">
-  <resultMap id="BaseResultMap" type="com.xiaoyi.blog.po.Blog">
-    <constructor>
-      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="first_picture" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="flag" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="views" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="appreciation" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="share_statement" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="commentabled" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="published" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="recommend" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="type_id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="tag_ids" javaType="java.lang.String" jdbcType="VARCHAR" />
-    </constructor>
+
+  <resultMap id="blogQuery" type="com.xiaoyi.blog.vo.BlogQuery">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="recommend" column="recommend"/>
+    <result property="published" column="published"/>
+    <result property="typeId" column="type_id"/>
+    <association property="type" javaType="com.xiaoyi.blog.po.Type">
+      <id property="id" column="id"/>
+      <result property="name" column="name"/>
+    </association>
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.xiaoyi.blog.po.BlogWithBLOBs">
-    <constructor>
-      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="first_picture" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="flag" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="views" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="appreciation" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="share_statement" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="commentabled" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="published" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="recommend" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="type_id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="tag_ids" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
-      <arg column="description" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
-    </constructor>
+
+  <resultMap id="blog" type="com.xiaoyi.blog.po.Blog">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="flag" column="flag"/>
+    <result property="views" column="views"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="typeId" column="type_id"/>
+    <result property="firstPicture" column="first_picture"/>
+    <result property="shareStatement" column="share_statement"/>
+    <result property="published" column="published"/>
+    <result property="appreciation" column="appreciation"/>
+    <result property="commentabled" column="commentabled"/>
+    <result property="description" column="description"/>
+    <result property="recommend" column="recommend"/>
+    <result property="createTime" column="create_time"/>
+    <result property="typeId" column="type_id"/>
+    <result property="userId" column="user_id"/>
+    <result property="tagIds" column="tag_ids"/>
+    <association property="type" javaType="com.xiaoyi.blog.po.Type">
+      <id property="id" column="typeid"/>
+      <result property="name" column="typename"/>
+    </association>
+    <association property="user" javaType="com.xiaoyi.blog.po.User">
+      <id property="id" column="uid"/>
+      <result property="nickname" column="nickname"/>
+      <result property="username" column="username"/>
+      <result property="email" column="email"/>
+      <result property="avatar" column="avatar"/>
+    </association>
+    <!--tags = List<Tag>-->
+    <collection property="tags" javaType="com.xiaoyi.blog.po.Tag">
+      <id property="id" column="tagid"/>
+      <result property="name" column="tagname"/>
+    </collection>
   </resultMap>
-  <sql id="Base_Column_List">
-    id, title, first_picture, flag, views, appreciation, share_statement, commentabled, 
-    published, recommend, create_time, update_time, type_id, user_id, tag_ids
-  </sql>
-  <sql id="Blob_Column_List">
-    content, description
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_blog
-    where id = #{id,jdbcType=BIGINT}
+
+  <select id="getBlog" resultType="com.xiaoyi.blog.po.Blog" parameterType="java.lang.Long">
+    select b.id, b.published, b.flag, b.title, b.content, b.type_id,
+           b.tag_ids, b.first_picture, b.description, b.recommend,
+           b.share_statement, b.appreciation, b.commentabled, b.views
+    from t_blog b  where  b.id = #{id};
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_blog
-    where id = #{id,jdbcType=BIGINT}
+
+  <select id="getAllBlog" resultMap="blog">  /*后台博客展示*/
+  select b.id, b.title, b.update_time, b.recommend, b.published,
+         t.id typeid, t.name typename
+  from t_blog b, t_type t
+  where b.type_id = t.id    /*博客类型id=类型id*/
+  </select>
+
+  <!--查询文章管理列表-->
+  <select id="getAllBlogQuery" resultMap="blogQuery">
+    select b.id,b.title,b.update_time,b.recommend,b.published,b.type_id,t.id,t.name from t_blog b left outer join t_type t on b.type_id = t.id order by b.update_time desc
+  </select>
+
+  <select id="searchByTitleOrTypeOrRecommend" parameterType="com.xiaoyi.blog.vo.SearchBlog" resultMap="blogQuery">
+    <bind name="pattern" value="'%' + title + '%'" />
+    select b.id,b.title,b.update_time,b.recommend,b.type_id,t.id,t.name from t_blog b ,t_type t
+    <where>
+      <if test="1 == 1">
+        b.type_id = t.id
+      </if>
+      <if test="typeId != null ">
+        and b.type_id = #{typeId}
+      </if>
+      <if test="title != null">
+        and b.title like #{pattern}
+      </if>
+    </where>
+
+  </select>
+
+  <insert id="saveBlog" parameterType="com.xiaoyi.blog.po.Blog" useGeneratedKeys="true" keyProperty="id">
+    insert into t_blog (id,title, content, first_picture, flag,
+                        views, comment_count, appreciation, share_statement, commentabled, published,
+                        recommend, create_time, update_time, type_id, user_id, description)
+    values (#{id},#{title},#{content},#{firstPicture},#{flag},#{views},#{commentCount},#{appreciation},
+            #{shareStatement},#{commentabled},#{published},#{recommend},#{createTime},
+            #{updateTime},#{typeId},#{userId},#{description});
+  </insert>
+
+  <!--  不传views，因为传进来的views是null  -->
+  <update id="updateBlog" parameterType="com.xiaoyi.blog.po.Blog">
+    update t_blog set published = #{published},flag = #{flag} ,
+                      title = #{title}, content = #{content}, type_id = #{typeId},
+                      first_picture = #{firstPicture} , description = #{description} , recommend = #{recommend} ,
+                      share_statement = #{shareStatement}, appreciation = #{appreciation},
+                      commentabled = #{commentabled} ,update_time = #{updateTime} where id = #{id};
+  </update>
+
+  <delete id="deleteBlog">
+    delete from blog.t_blog where id = #{id}
   </delete>
-  <insert id="insert" parameterType="com.xiaoyi.blog.po.BlogWithBLOBs">
-    insert into t_blog (id, title, first_picture, 
-      flag, views, appreciation, 
-      share_statement, commentabled, published, 
-      recommend, create_time, update_time, 
-      type_id, user_id, tag_ids, 
-      content, description)
-    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{firstPicture,jdbcType=VARCHAR}, 
-      #{flag,jdbcType=VARCHAR}, #{views,jdbcType=INTEGER}, #{appreciation,jdbcType=INTEGER}, 
-      #{shareStatement,jdbcType=INTEGER}, #{commentabled,jdbcType=INTEGER}, #{published,jdbcType=INTEGER}, 
-      #{recommend,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{typeId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{tagIds,jdbcType=VARCHAR}, 
-      #{content,jdbcType=LONGVARCHAR}, #{description,jdbcType=LONGVARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.xiaoyi.blog.po.BlogWithBLOBs">
-    insert into t_blog
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="title != null">
-        title,
-      </if>
-      <if test="firstPicture != null">
-        first_picture,
-      </if>
-      <if test="flag != null">
-        flag,
-      </if>
-      <if test="views != null">
-        views,
-      </if>
-      <if test="appreciation != null">
-        appreciation,
-      </if>
-      <if test="shareStatement != null">
-        share_statement,
-      </if>
-      <if test="commentabled != null">
-        commentabled,
-      </if>
-      <if test="published != null">
-        published,
-      </if>
-      <if test="recommend != null">
-        recommend,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="typeId != null">
-        type_id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="tagIds != null">
-        tag_ids,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="description != null">
-        description,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="firstPicture != null">
-        #{firstPicture,jdbcType=VARCHAR},
-      </if>
-      <if test="flag != null">
-        #{flag,jdbcType=VARCHAR},
-      </if>
-      <if test="views != null">
-        #{views,jdbcType=INTEGER},
-      </if>
-      <if test="appreciation != null">
-        #{appreciation,jdbcType=INTEGER},
-      </if>
-      <if test="shareStatement != null">
-        #{shareStatement,jdbcType=INTEGER},
-      </if>
-      <if test="commentabled != null">
-        #{commentabled,jdbcType=INTEGER},
-      </if>
-      <if test="published != null">
-        #{published,jdbcType=INTEGER},
-      </if>
-      <if test="recommend != null">
-        #{recommend,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="typeId != null">
-        #{typeId,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="tagIds != null">
-        #{tagIds,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="description != null">
-        #{description,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.xiaoyi.blog.po.BlogWithBLOBs">
-    update t_blog
-    <set>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="firstPicture != null">
-        first_picture = #{firstPicture,jdbcType=VARCHAR},
-      </if>
-      <if test="flag != null">
-        flag = #{flag,jdbcType=VARCHAR},
-      </if>
-      <if test="views != null">
-        views = #{views,jdbcType=INTEGER},
-      </if>
-      <if test="appreciation != null">
-        appreciation = #{appreciation,jdbcType=INTEGER},
-      </if>
-      <if test="shareStatement != null">
-        share_statement = #{shareStatement,jdbcType=INTEGER},
-      </if>
-      <if test="commentabled != null">
-        commentabled = #{commentabled,jdbcType=INTEGER},
-      </if>
-      <if test="published != null">
-        published = #{published,jdbcType=INTEGER},
-      </if>
-      <if test="recommend != null">
-        recommend = #{recommend,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="typeId != null">
-        type_id = #{typeId,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="tagIds != null">
-        tag_ids = #{tagIds,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="description != null">
-        description = #{description,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xiaoyi.blog.po.BlogWithBLOBs">
-    update t_blog
-    set title = #{title,jdbcType=VARCHAR},
-      first_picture = #{firstPicture,jdbcType=VARCHAR},
-      flag = #{flag,jdbcType=VARCHAR},
-      views = #{views,jdbcType=INTEGER},
-      appreciation = #{appreciation,jdbcType=INTEGER},
-      share_statement = #{shareStatement,jdbcType=INTEGER},
-      commentabled = #{commentabled,jdbcType=INTEGER},
-      published = #{published,jdbcType=INTEGER},
-      recommend = #{recommend,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      type_id = #{typeId,jdbcType=BIGINT},
-      user_id = #{userId,jdbcType=BIGINT},
-      tag_ids = #{tagIds,jdbcType=VARCHAR},
-      content = #{content,jdbcType=LONGVARCHAR},
-      description = #{description,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.xiaoyi.blog.po.Blog">
-    update t_blog
-    set title = #{title,jdbcType=VARCHAR},
-      first_picture = #{firstPicture,jdbcType=VARCHAR},
-      flag = #{flag,jdbcType=VARCHAR},
-      views = #{views,jdbcType=INTEGER},
-      appreciation = #{appreciation,jdbcType=INTEGER},
-      share_statement = #{shareStatement,jdbcType=INTEGER},
-      commentabled = #{commentabled,jdbcType=INTEGER},
-      published = #{published,jdbcType=INTEGER},
-      recommend = #{recommend,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      type_id = #{typeId,jdbcType=BIGINT},
-      user_id = #{userId,jdbcType=BIGINT},
-      tag_ids = #{tagIds,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+
 </mapper>

@@ -23,7 +23,7 @@ pagehelper:
 logging:
   level:
     root: info
-    com.xiaoyi: info
+    com.xiaoyi: TRACE
   file:
     name: log/blog-pro.log
 
