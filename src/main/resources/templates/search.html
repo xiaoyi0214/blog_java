@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <!-- 适应移动端 -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>搜索页</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body>
+
+<!--导航-->
+<nav id="nav" class="gird-header">
+  <div class="ui container">
+    <div class="ui inverted secondary stackable menu">
+      <h2 class="ui teal header h-padded-left-mini">Blog</h2>
+      <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"><i class="home icon "></i> 首页</a>
+      <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"><i class="idea icon"></i> 分类</a>
+      <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i> 标签</a>
+      <a href="#" class="m-item item m-mobile-hide"><i class="clone icon"></i> 归档</a>
+      <a href="#" class="m-item item m-mobile-hide"><i class="info icon"></i> 关于我</a>
+
+      <div class="right m-item item m-mobile-hide">
+        <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
+          <div class="ui icon transparent input m-margin-tb-tiny" style="color: white">
+            <input style="color: white" type="text" name="query" placeholder="Search...." th:value="${query}">
+            <i onclick="document.forms['search'].submit()" class="search link icon"></i>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+    <i class="sidebar icon"></i>
+  </a>
+</nav>
+
+  <!--中间内容-->
+  <div  class="m-margin-">
+    <div class="ui container">
+      <!--header-->
+      <div class="ui top attached segment">
+        <div class="ui middle aligned two column grid">
+          <div class="column">
+            <h3 class="ui teal header">搜索结果</h3>
+          </div>
+          <div class="right aligned column">
+            共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${pageInfo.total}"> 14 </h2> 个
+          </div>
+        </div>
+      </div>
+
+      <div class="ui top attached segment">
+        <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${pageInfo.list}">
+          <div class="ui middle aligned mobile reversed stackable grid" >
+            <div class="eleven wide column">
+              <h3 class="ui header" ><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="m-black m-title-font" th:text="${blog.title}">大圣，此去欲何?</a></h3>
+              <p class="m-text m-margin-top-max" th:text="|${blog.description}......|">戴上金箍，没法爱你；放下金箍，没法保护你。我知道上天不会给我第二次机会，曾经我们说好的永远，原来也仅仅只有，十二画，而已。“大圣，此去欲何?”“踏南天，碎凌霄。”“若一去不回……”“便一去不回” 其实很多时候，我们都是有机会的，最后真正放弃的，是我们自己。......</p>
+              <div class="ui grid m-margin-top-max">
+                <div class="eleven wide column">
+                  <div class="ui mini horizontal link list">
+                    <div class="item">
+                      <img src="../static/images/me.jpg" th:src="@{${blog.avatar}}"  alt="" class="ui avatar image">
+                      <div class="content"><a href="#" th:href="@{/about}" target="_blank" class="header" th:text="${blog.nickname}" >oneStar</a></div>
+                    </div>
+                    <div class="item">
+                      <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2020-01-01</span>
+                    </div>
+                    <div class="item">
+                      <i class="eye icon"></i> <span th:text="${blog.views}">2222</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="right aligned five wide column">
+                  <a href="#" target="_blank" class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.typeName}">好文</a>
+                </div>
+              </div>
+            </div>
+            <!--博文首图-->
+            <div class="five wide column">
+              <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                <img src="../static/images/backimg1.jpg" th:src="@{${blog.firstPicture}}"  alt="" class="ui rounded image">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <br>
+  <br>
+<!--底部栏-->
+<!-- 底部 -->
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+  <div class="ui center aligned container">
+    <div class="ui inverted divided stackable grid">
+      <div class="three wide column">
+        <div class="ui inverted link list">
+          <div class="item">
+            <img src="../static/images/wechat.jpg" class="ui rounded image" alt="" style="width:110px">
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">
+        <h4 class="ui inverted header m-text-spaced m-text-thin ">最新博客</h4>
+        <div class="ui inverted link list">
+          <a href="#" class="item">Redis存储</a>
+          <a href="#" class="item">SpringCloud</a>
+          <a href="#" class="item">用户故事</a>
+        </div>
+      </div>
+      <div class="four wide column">
+        <h4 class="ui inverted header m-text-spaced m-text-thin ">联系我</h4>
+        <div class="ui inverted link list">
+          <a href="#" class="item">Email：anxiaoyi0214@aliyun.com</a>
+          <a href="#" class="item">QQ：1206801814</a>
+        </div>
+      </div>
+      <div class="six wide column">
+        <h4 class="ui inverted header m-text-spaced m-text-thin ">XiaoYi</h4>
+        <div class="ui inverted link list">
+          <p class=" m-text-spaced m-text-thin m-opacity-mini">这是我的个人博客，会分享一些关于编程，技术的相关内容。。。。。。。。。。。。。。。。。。</p>
+        </div>
+      </div>
+    </div>
+    <div class="ui inverted section divider"></div>
+    <p class="m-text-lined m-text-spaced m-text-thin m-opacity-tiny">Copyright © 2019 - 2020 XiaoYi Designed by XiaoYi</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+  <script>
+
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+  </script>
+</body>
+</html>

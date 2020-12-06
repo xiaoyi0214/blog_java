@@ -52,6 +52,28 @@
     </collection>
   </resultMap>
 
+  <resultMap id="firstPageBlog" type="com.xiaoyi.blog.vo.FirstPageBlog">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="firstPicture" column="first_picture"/>
+    <result property="views" column="views"/>
+    <result property="commentCount" column="comment_count"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="description" column="description"/>
+
+    <result property="typeName" column="name"/>
+
+    <result property="nickname" column="nickname"/>
+    <result property="avatar" column="avatar"/>
+  </resultMap>
+
+  <resultMap id="recommendBlog" type="com.xiaoyi.blog.vo.RecommendBlog">
+    <id property="id" column="id"/>
+    <result property="title" column="title"/>
+    <result property="recommend" column="recommend"/>
+    <result property="firstPicture" column="first_picture"/>
+  </resultMap>
+
   <select id="getBlog" resultType="com.xiaoyi.blog.po.Blog" parameterType="java.lang.Long">
     select b.id, b.published, b.flag, b.title, b.content, b.type_id,
            b.tag_ids, b.first_picture, b.description, b.recommend,
@@ -109,5 +131,94 @@
   <delete id="deleteBlog">
     delete from blog.t_blog where id = #{id}
   </delete>
+
+  <!--获取首页文章-->
+  <select id="getFirstPageBlog" resultMap="firstPageBlog">
+    select
+           b.id,
+           b.title,
+           b.first_picture,
+           b.views,
+           b.comment_count,
+           b.update_time,
+           b.description,
+           t.name,
+           u.nickname,
+           u.avatar
+    from t_blog b
+    left join t_type t on b.type_id = t.id
+    left join t_user u on b.user_id = u.id
+    order by b.update_time desc
+  </select>
+
+  <!--首页搜索文章-->
+  <select id="getSearchBlog" parameterType="java.lang.String" resultMap="firstPageBlog">
+    <bind name="pattern" value="'%' + query + '%'" />
+    select
+           b.id,
+           b.title,
+           b.first_picture,
+           b.views,
+           b.comment_count,
+           b.update_time,
+           b.description,
+           t.name,
+           u.nickname,
+           u.avatar
+    from t_blog b
+    left join t_type t on b.type_id = t.id
+    left join t_user u on b.user_id = u.id
+    where b.title like #{pattern} or b.content like #{pattern}
+    order by b.update_time desc
+  </select>
+
+    <resultMap id="detailedBlog" type="com.xiaoyi.blog.po.DetailedBlog">
+        <id property="id" column="id"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="flag" column="flag"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="typeName" column="name"/>
+        <result property="views" column="views"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="commentabled" column="commentabled"/>
+        <result property="shareStatement" column="share_statement"/>
+        <result property="appreciation" column="appreciation"/>
+        <result property="nickname" column="nickname"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+  <!--博客详情查询-->
+  <select id="getDetailedBlog" resultMap="detailedBlog">
+    select
+           b.id,
+           b.first_picture,
+           b.flag,
+           b.title,
+           b.content,
+           b.views,
+           b.comment_count,
+           b.update_time,
+           b.commentabled,
+           b.share_statement,
+           b.appreciation,
+           u.nickname,
+           u.avatar,
+           t.name
+    from t_blog b
+    left join t_type t on b.type_id = t.id
+    left join t_user u on b.user_id = u.id
+    where b.id = #{id}
+  </select>
+
+  <!--推荐文章-->
+  <select id="getAllRecommendBlog" resultMap="recommendBlog">
+    select *
+    from t_blog b
+    where
+        b.recommend = true
+    order by b.update_time desc
+    limit 4
+  </select>
 
 </mapper>
