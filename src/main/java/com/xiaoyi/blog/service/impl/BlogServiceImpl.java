@@ -1,9 +1,14 @@
 package com.xiaoyi.blog.service.impl;
 
+import com.xiaoyi.blog.NotFoundException;
 import com.xiaoyi.blog.dao.BlogMapper;
 import com.xiaoyi.blog.po.Blog;
+import com.xiaoyi.blog.po.DetailedBlog;
 import com.xiaoyi.blog.service.BlogService;
+import com.xiaoyi.blog.util.MarkdownUtils;
 import com.xiaoyi.blog.vo.BlogQuery;
+import com.xiaoyi.blog.vo.FirstPageBlog;
+import com.xiaoyi.blog.vo.RecommendBlog;
 import com.xiaoyi.blog.vo.SearchBlog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,6 +70,34 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public int deleteBlog(Long id) {
         return blogMapper.deleteBlog(id);
+    }
+
+    @Override
+    public List<FirstPageBlog> getAllFirstPageBlog() {
+        List<FirstPageBlog> firstPageBlog = blogMapper.getFirstPageBlog();
+        return firstPageBlog;
+    }
+
+    @Override
+    public List<FirstPageBlog> getSearchBlog(String query) {
+        return blogMapper.getSearchBlog(query);
+    }
+
+    @Override
+    public DetailedBlog getDetailedBlog(Long id) {
+        DetailedBlog detailedBlog = blogMapper.getDetailedBlog(id);
+        if (detailedBlog == null){
+            throw new NotFoundException("该博客不存在");
+        }
+        String content = detailedBlog.getContent();
+        detailedBlog.setContent(MarkdownUtils.markdownToHtml(content));
+//        blogMapper.updateViews()
+        return detailedBlog;
+    }
+
+    @Override
+    public List<RecommendBlog> getAllRecommendBlog() {
+        return blogMapper.getAllRecommendBlog();
     }
 
 

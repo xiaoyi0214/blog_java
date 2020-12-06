@@ -1,7 +1,10 @@
 package com.xiaoyi.blog.service;
 
 import com.xiaoyi.blog.po.Blog;
+import com.xiaoyi.blog.po.DetailedBlog;
 import com.xiaoyi.blog.vo.BlogQuery;
+import com.xiaoyi.blog.vo.FirstPageBlog;
+import com.xiaoyi.blog.vo.RecommendBlog;
 import com.xiaoyi.blog.vo.SearchBlog;
 
 import java.util.List;
@@ -24,5 +27,14 @@ public interface BlogService {
     int updateBlog(Blog blog);
 
     int deleteBlog(Long id);
+
+    List<FirstPageBlog> getAllFirstPageBlog();
+
+    List<FirstPageBlog> getSearchBlog(String query);
+
+    DetailedBlog getDetailedBlog(Long id);
+
+    List<RecommendBlog> getAllRecommendBlog();
+
 
 }

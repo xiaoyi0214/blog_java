@@ -178,3 +178,17 @@ body{
     }
 
 }
+
+/*导航栏样式*/
+.gird-header {
+    width: 100%;
+    min-height: 60px;
+    opacity: 0.5;
+    position: fixed;
+    background-color: rgba(0,0,0,1);
+    z-index: 11002;
+    top: 0;
+    left: 0;
+    /*border-bottom: 1px solid #e8e9e7;*/
+    font-size: 15px;
+}
