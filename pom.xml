@@ -23,19 +23,19 @@
         <dependency>
             <groupId>com.atlassian.commonmark</groupId>
             <artifactId>commonmark</artifactId>
-            <version>LATEST</version>
+            <version>0.15.2</version>
         </dependency>
 
         <dependency>
             <groupId>com.atlassian.commonmark</groupId>
             <artifactId>commonmark-ext-heading-anchor</artifactId>
-            <version>LATEST</version>
+            <version>0.15.2</version>
         </dependency>
 
         <dependency>
             <groupId>com.atlassian.commonmark</groupId>
             <artifactId>commonmark-ext-gfm-tables</artifactId>
-            <version>LATEST</version>
+            <version>0.15.2</version>
         </dependency>
 
         <!-- 分页插件 -->
@@ -107,17 +107,17 @@
             </plugin>
 
             <!--mybatis-generator插件-->
-            <plugin>
-                <!--Mybatis-generator插件,用于自动生成Mapper和POJO-->
+            <!--<plugin>
+                &lt;!&ndash;Mybatis-generator插件,用于自动生成Mapper和POJO&ndash;&gt;
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.3.5</version>
                 <configuration>
-                    <!--配置文件的位置 一定要改成配置文件的位置-->
+                    &lt;!&ndash;配置文件的位置 一定要改成配置文件的位置&ndash;&gt;
                     <configurationFile>src/main/resources/generatorConfig.xml</configurationFile>
-                    <!-- 在控制台打印执行日志 -->
+                    &lt;!&ndash; 在控制台打印执行日志 &ndash;&gt;
                     <verbose>true</verbose>
-                    <!-- 重复生成时会覆盖之前的文件-->
+                    &lt;!&ndash; 重复生成时会覆盖之前的文件&ndash;&gt;
                     <overwrite>true</overwrite>
                 </configuration>
                 <executions>
@@ -134,14 +134,14 @@
                         <artifactId>mybatis-generator-core</artifactId>
                         <version>1.3.5</version>
                     </dependency>
-                    <!-- 数据库连接选择8.0以上的，因为用的mysql8.0-->
+                    &lt;!&ndash; 数据库连接选择8.0以上的，因为用的mysql8.0&ndash;&gt;
                         <dependency>
                             <groupId>mysql</groupId>
                             <artifactId>mysql-connector-java</artifactId>
                             <version>8.0.16</version>
                         </dependency>
                 </dependencies>
-            </plugin>
+            </plugin>-->
 
         </plugins>
     </build>
